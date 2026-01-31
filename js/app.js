@@ -129,6 +129,9 @@ function initializeMap() {
     // Initialiser les contrôles personnalisés
     initializeCustomControls();
 
+    // Initialiser la géolocalisation
+    initializeGeolocation();
+
     // Construire les panneaux
     buildLayerPanel();
     buildBasemapsPanel();
@@ -1963,4 +1966,61 @@ function exportCatalog() {
     a.download = 'catalogue_couches.csv';
     a.click();
     window.URL.revokeObjectURL(url);
+}
+
+// ========================================
+// GÉOLOCALISATION
+// ========================================
+
+function initializeGeolocation() {
+    if (navigator.geolocation) {
+        const geolocationButton = L.control({ position: 'topleft' });
+
+        geolocationButton.onAdd = function(map) {
+            const div = L.DomUtil.create('div', 'leaflet-control-geolocation');
+            div.innerHTML = '<button id="geolocation-btn" class="geolocation-btn" title="Ma position"><i class="fas fa-crosshairs"></i></button>';
+            return div;
+        };
+
+        geolocationButton.addTo(map);
+
+        document.getElementById('geolocation-btn').addEventListener('click', function() {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const accuracy = position.coords.accuracy;
+
+                // Centrer la carte sur la position
+                map.setView([lat, lng], 15);
+
+                // Ajouter un marqueur pour la position
+                if (window.userLocationMarker) {
+                    map.removeLayer(window.userLocationMarker);
+                }
+                window.userLocationMarker = L.marker([lat, lng]).addTo(map)
+                    .bindPopup(`Votre position<br>Précision: ${accuracy.toFixed(0)} m`)
+                    .openPopup();
+
+                // Ajouter un cercle d'incertitude
+                if (window.userLocationCircle) {
+                    map.removeLayer(window.userLocationCircle);
+                }
+                window.userLocationCircle = L.circle([lat, lng], {
+                    color: 'blue',
+                    fillColor: '#blue',
+                    fillOpacity: 0.1,
+                    radius: accuracy
+                }).addTo(map);
+
+            }, function(error) {
+                alert('Erreur de géolocalisation: ' + error.message);
+            }, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 300000
+            });
+        });
+    } else {
+        console.log('Géolocalisation non supportée par ce navigateur.');
+    }
 }
