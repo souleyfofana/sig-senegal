@@ -58,6 +58,11 @@
                             <i class="fas fa-search"></i> Recherche
                         </a>
                     </li>
+                    <li class="nav-item" id="install-btn" style="display: none;">
+                        <a href="#" class="nav-link" onclick="installApp(); return false;">
+                            <i class="fas fa-mobile-alt"></i> Installer l'app
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link" onclick="toggleFullscreen(); return false;">
                             <i class="fas fa-expand"></i> Plein écran
@@ -82,7 +87,14 @@
             </div>
         </nav>
 
-        <!-- Conteneur principal -->
+    <!-- Bannière d'installation PWA -->
+    <div id="install-banner" class="install-banner" style="display: none;">
+        <div class="install-banner-content">
+            <span>Installez SIG Sénégal pour une meilleure expérience !</span>
+            <button id="install-banner-btn" class="install-banner-btn">Installer</button>
+            <button id="dismiss-banner-btn" class="dismiss-banner-btn">×</button>
+        </div>
+    </div>
         <div class="main-container">
             <!-- Panneau de gauche - Couches -->
             <div class="left-panel">

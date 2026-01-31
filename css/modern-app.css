@@ -1282,3 +1282,54 @@ html, body {
 .geolocation-btn:active {
     transform: scale(0.95);
 }
+
+/* ========================================
+   INSTALLATION PWA
+   ======================================== */
+
+.install-banner {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 10px;
+    z-index: 1001;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.install-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.install-banner-btn {
+    background: var(--white);
+    color: var(--primary-color);
+    border: none;
+    padding: 5px 10px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.dismiss-banner-btn {
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px;
+}
+
+@media (min-width: 768px) {
+    .install-banner {
+        display: none !important;
+    }
+}

@@ -2024,3 +2024,82 @@ function initializeGeolocation() {
         console.log('Géolocalisation non supportée par ce navigateur.');
     }
 }
+
+// ========================================
+// INSTALLATION PWA
+// ========================================
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+    // Update UI to notify the user they can install the PWA
+    showInstallButton();
+});
+
+function showInstallButton() {
+    const installBtn = document.getElementById('install-btn');
+    if (installBtn) {
+        installBtn.style.display = 'block';
+    }
+    // Show banner on mobile
+    if (window.innerWidth < 768) {
+        const banner = document.getElementById('install-banner');
+        if (banner) {
+            banner.style.display = 'flex';
+        }
+    }
+}
+
+function installApp() {
+    // Hide the app provided install promotion
+    const installBtn = document.getElementById('install-btn');
+    if (installBtn) {
+        installBtn.style.display = 'none';
+    }
+    // Hide the banner
+    const banner = document.getElementById('install-banner');
+    if (banner) {
+        banner.style.display = 'none';
+    }
+    // Show the install prompt
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+        });
+    }
+}
+
+// Check if already installed
+window.addEventListener('appinstalled', (evt) => {
+    console.log('App was installed.');
+});
+
+// Event listeners for install banner
+document.addEventListener('DOMContentLoaded', function() {
+    const installBannerBtn = document.getElementById('install-banner-btn');
+    const dismissBannerBtn = document.getElementById('dismiss-banner-btn');
+
+    if (installBannerBtn) {
+        installBannerBtn.addEventListener('click', installApp);
+    }
+
+    if (dismissBannerBtn) {
+        dismissBannerBtn.addEventListener('click', function() {
+            const banner = document.getElementById('install-banner');
+            if (banner) {
+                banner.style.display = 'none';
+            }
+        });
+    }
+});
