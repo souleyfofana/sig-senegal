@@ -41,9 +41,7 @@ const urlsToCache = [
   '/data/Arrondissement_5.js',
   '/data/localites_7.js',
   '/data/Routes_6.js',
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  '/manifest.json'
 ];
 
 self.addEventListener('install', function(event) {

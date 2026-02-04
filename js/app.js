@@ -134,17 +134,14 @@ function initializeMap() {
         initializeCustomControls();
         
 
-        
-}
+        // Initialiser la géolocalisation
+        initializeGeolocation();
 
-    // Initialiser la géolocalisation
-    initializeGeolocation();
-
-    // Construire les panneaux
-    buildLayerPanel();
-    buildBasemapsPanel();
-    buildLegend();
-}
+        // Construire les panneaux
+        buildLayerPanel();
+        buildBasemapsPanel();
+        buildLegend();
+    }
 
 // ========================================
 // INITIALISATION DES FONDS DE CARTE
