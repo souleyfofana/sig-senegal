@@ -56,7 +56,7 @@ const layersCatalog = {
         attributes: ['type'],
         color: 'rgba(216,36,37,1.0)',
         icon: 'fa-road',
-        visible: true,
+        visible: false,
         info: 'Réseau complet des routes, autoroutes, pistes et voies ferrées. Classés par type et importance.'
     },
     'localites_7': {
@@ -66,7 +66,7 @@ const layersCatalog = {
         attributes: ['name', 'population'],
         color: 'rgba(52, 152, 219, 0.8)',
         icon: 'fa-city',
-        visible: true,
+        visible: false,
         info: 'Points de peuplement, villes et villages du Sénégal avec informations démographiques.'
     }
 };
@@ -171,66 +171,99 @@ function initializeBasemaps() {
 }
 
 // ========================================
+// CHARGEMENT DES DONNÉES À LA DEMANDE
+// ========================================
+
+function loadLayerData(layerId) {
+    // Charger le script de données dynamiquement
+    const script = document.createElement('script');
+    script.src = `data/${layerId}.js`;
+    script.defer = true;
+    script.onload = () => {
+        createLayer(layerId);
+    };
+    document.head.appendChild(script);
+}
+
+function createLayer(layerId) {
+    const config = getLayerConfig(layerId);
+    if (!config) return;
+
+    const paneIndex = 410 + Object.keys(layers).length;
+    map.createPane(`pane_${layerId}`);
+    map.getPane(`pane_${layerId}`).style.zIndex = paneIndex;
+    map.getPane(`pane_${layerId}`).style['mix-blend-mode'] = 'normal';
+
+    const dataVar = `json_${layerId}`;
+    const data = window[dataVar];
+    if (!data) return;
+
+    const geoJsonLayer = L.geoJson(data, {
+        attribution: '',
+        interactive: true,
+        dataVar: dataVar,
+        layerName: `layer_${layerId}`,
+        pane: `pane_${layerId}`,
+        onEachFeature: config.popup,
+        style: config.style,
+        pointToLayer: function(feature, latlng) {
+            return L.circleMarker(latlng, {
+                radius: 6,
+                fillColor: "#3498db",
+                color: "#2c3e50",
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+        }
+    });
+
+    // Calculer les statistiques
+    const stats = {
+        featureCount: data.features ? data.features.length : 0,
+        bounds: null
+    };
+
+    if (data.features && data.features.length > 0) {
+        stats.bounds = L.geoJson(data).getBounds();
+    }
+
+    layers[layerId] = {
+        layer: geoJsonLayer,
+        name: config.name,
+        visible: false,
+        config: config,
+        stats: stats,
+        catalog: layersCatalog[layerId]
+    };
+
+    // Ajouter la couche
+    map.addLayer(geoJsonLayer);
+    layers[layerId].visible = true;
+    updateLegend();
+}
+
+function getLayerConfig(id) {
+    const configs = {
+        'Region_3': { name: 'Régions', style: styleRegion, popup: popRegion },
+        'Departement_4': { name: 'Départements', style: styleDepartement, popup: popDepartement },
+        'Arrondissement_5': { name: 'Arrondissements', style: styleArrondissement, popup: popArrondissement },
+        'Routes_6': { name: 'Routes', style: styleRoutes, popup: popRoutes },
+        'localites_7': { name: 'Localités', style: styleLocalites, popup: popLocalites }
+    };
+    return configs[id];
+}
+
+// ========================================
 // INITIALISATION DES COUCHES
 // ========================================
 
 function initializeLayers() {
-    // Variables automatiques (du fichier JS de données)
-    const layersConfig = [
-        { id: 'Region_3', name: 'Régions', data: json_Region_3, style: styleRegion, popup: popRegion },
-        { id: 'Departement_4', name: 'Départements', data: json_Departement_4, style: styleDepartement, popup: popDepartement },
-        { id: 'Arrondissement_5', name: 'Arrondissements', data: json_Arrondissement_5, style: styleArrondissement, popup: popArrondissement },
-        { id: 'Routes_6', name: 'Routes', data: json_Routes_6, style: styleRoutes, popup: popRoutes },
-        { id: 'localites_7', name: 'Localités', data: json_localites_7, style: styleLocalites, popup: popLocalites }
-    ];
-
-    layersConfig.forEach((config, index) => {
-        const paneIndex = 410 + index;
-        map.createPane(`pane_${config.id}`);
-        map.getPane(`pane_${config.id}`).style.zIndex = paneIndex;
-        map.getPane(`pane_${config.id}`).style['mix-blend-mode'] = 'normal';
-
-        const geoJsonLayer = L.geoJson(config.data, {
-            attribution: '',
-            interactive: true,
-            dataVar: `json_${config.id}`,
-            layerName: `layer_${config.id}`,
-            pane: `pane_${config.id}`,
-            onEachFeature: config.popup,
-            style: config.style,
-            pointToLayer: function(feature, latlng) {
-                return L.circleMarker(latlng, {
-                    radius: 6,
-                    fillColor: "#3498db",
-                    color: "#2c3e50",
-                    weight: 2,
-                    opacity: 1,
-                    fillOpacity: 0.8
-                });
-            }
-        });
-
-        // Calculer les statistiques
-        const stats = {
-            featureCount: config.data.features ? config.data.features.length : 0,
-            bounds: null
-        };
-
-        if (config.data.features && config.data.features.length > 0) {
-            stats.bounds = L.geoJson(config.data).getBounds();
+    // Charger seulement les couches visibles par défaut
+    Object.keys(layersCatalog).forEach(id => {
+        if (layersCatalog[id].visible) {
+            loadLayerData(id);
         }
-
-        layers[config.id] = {
-            layer: geoJsonLayer,
-            name: config.name,
-            visible: true,
-            config: config,
-            stats: stats,
-            catalog: layersCatalog[config.id]
-        };
-
-        // Ajouter la couche par défaut
-        map.addLayer(geoJsonLayer);
     });
 }
 
@@ -795,8 +828,12 @@ function buildLegend() {
 // ========================================
 
 function toggleLayer(key) {
-    const layerInfo = layers[key];
-    if (!layerInfo) return;
+    let layerInfo = layers[key];
+    if (!layerInfo) {
+        // Charger la couche si elle n'existe pas
+        loadLayerData(key);
+        return;
+    }
 
     try {
         if (layerInfo.visible) {
