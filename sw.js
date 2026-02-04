@@ -50,7 +50,14 @@ self.addEventListener('install', function(event) {
     caches.open(CACHE_NAME)
       .then(function(cache) {
         console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        // Cache files one by one to handle failures gracefully
+        var cachePromises = urlsToCache.map(function(url) {
+          return cache.add(url).catch(function(error) {
+            console.warn('Failed to cache:', url, error);
+            // Continue with other files even if one fails
+          });
+        });
+        return Promise.all(cachePromises);
       })
   );
 });

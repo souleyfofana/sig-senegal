@@ -91,7 +91,7 @@ const basemapsConfig = {
         name: 'CartoDB Dark',
         desc: 'Fond sombre',
         layer: null,
-        url: 'http://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+        url: 'https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
         attribution: ''
     }
 };
