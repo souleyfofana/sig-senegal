@@ -6,6 +6,7 @@
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="theme-color" content="#0077BE">
         <link rel="manifest" href="manifest.json">
         <link rel="preload" href="css/leaflet.css" as="style">
         <link rel="preload" href="css/modern-app.css" as="style">
@@ -1235,7 +1236,7 @@
         <script>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
-                    navigator.serviceWorker.register('/sw.js')
+                    navigator.serviceWorker.register('./sw.js')
                         .then(function(registration) {
                             console.log('ServiceWorker registration successful with scope: ', registration.scope);
                         }, function(err) {

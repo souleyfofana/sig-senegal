@@ -1253,30 +1253,33 @@ html, body {
    ======================================== */
 
 .leaflet-control-geolocation {
-    background: var(--white);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    margin: 10px;
+    background: none;
+    border: none;
+    box-shadow: none;
+    margin-bottom: 20px;
+    margin-right: 10px;
 }
 
 .geolocation-btn {
-    background: var(--primary-color);
-    color: var(--white);
+    background: var(--white);
+    color: #666;
     border: none;
-    border-radius: var(--border-radius);
-    width: 40px;
-    height: 40px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 20px;
     transition: var(--transition);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .geolocation-btn:hover {
-    background: var(--primary-dark);
-    transform: scale(1.05);
+    color: var(--primary-color);
+    background: #f8f8f8;
+    transform: none;
 }
 
 .geolocation-btn:active {

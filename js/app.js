@@ -2011,7 +2011,7 @@ function exportCatalog() {
 
 function initializeGeolocation() {
     if (navigator.geolocation) {
-        const geolocationButton = L.control({ position: 'topleft' });
+        const geolocationButton = L.control({ position: 'bottomright' });
 
         geolocationButton.onAdd = function(map) {
             const div = L.DomUtil.create('div', 'leaflet-control-geolocation');
@@ -2042,7 +2042,7 @@ function initializeGeolocation() {
                 if (window.userLocationCircle) {
                     map.removeLayer(window.userLocationCircle);
                 }
-                window.userLocationCircle = L.circle([lat, lng], {
+                window.userLocationCircle = L.circleMarker([lat, lng], {
                     color: 'blue',
                     fillColor: '#blue',
                     fillOpacity: 0.1,
