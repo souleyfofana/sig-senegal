@@ -3,6 +3,8 @@
    Script Principal - app.js
    ======================================== */
 
+console.log('app.js loaded');
+
 // Variables globales
 let map = null;
 let minimap = null;
@@ -102,33 +104,46 @@ const basemapsConfig = {
 
 function initializeMap() {
     console.log('Initializing map...');
-    // Créer la carte
-    map = L.map('map', {
-        zoomControl: false,
-        maxZoom: 28,
-        minZoom: 1
-    }).fitBounds(initialBounds);
+    try {
+        // Créer la carte
+        map = L.map('map', {
+            zoomControl: false,
+            maxZoom: 28,
+            minZoom: 1
+        }).fitBounds(initialBounds);
+        console.log('Map created');
 
-    // Ajouter hash URL
-    new L.Hash(map);
+        // Ajouter hash URL
+        new L.Hash(map);
+        console.log('Hash added');
 
-    // Configuration du contrôle d'attribution
-    map.attributionControl.setPrefix(
-        '<a href="https://leafletjs.com" title="Une librairie JS pour les cartes interactives">Leaflet</a> &middot; ' +
-        '<a href="https://qgis.org">QGIS</a>'
-    );
+        // Configuration du contrôle d'attribution
+        map.attributionControl.setPrefix(
+            '<a href="https://leafletjs.com" title="Une librairie JS pour les cartes interactives">Leaflet</a> &middot; ' +
+            '<a href="https://qgis.org">QGIS</a>'
+        );
 
-    // Initialiser les fonds de carte
-    initializeBasemaps();
+        // Initialiser les fonds de carte
+        initializeBasemaps();
+        console.log('Basemaps initialized');
 
-    // Initialiser les couches de données
-    initializeLayers();
+        // Initialiser les couches de données
+        initializeLayers();
+        console.log('Layers initialized');
 
-    // Ajouter les événements de la carte
-    addMapEvents();
+        // Ajouter les événements de la carte
+        addMapEvents();
+        console.log('Events added');
 
-    // Initialiser les contrôles personnalisés
-    initializeCustomControls();
+        // Initialiser les contrôles personnalisés
+        initializeCustomControls();
+        console.log('Custom controls initialized');
+
+        console.log('Map initialization complete');
+    } catch (error) {
+        console.error('Error initializing map:', error);
+    }
+}
 
     // Initialiser la géolocalisation
     initializeGeolocation();
@@ -164,10 +179,10 @@ function initializeBasemaps() {
         basemaps[key] = config.layer;
 
         // Ajouter le premier en défaut
-        if (key === 'osm') {
-            config.layer.addTo(map);
-            currentBasemap = key;
-        }
+        // if (key === 'osm') {
+        //     config.layer.addTo(map);
+        //     currentBasemap = key;
+        // }
     });
 }
 
@@ -256,6 +271,7 @@ function getLayerConfig(id) {
 // ========================================
 
 function initializeLayers() {
+    console.log('Initializing layers...');
     // Charger seulement les couches visibles par défaut, sauf celles déjà chargées
     Object.keys(layersCatalog).forEach(id => {
         if (layersCatalog[id].visible && id !== 'Region_3') {  // Region_3 est déjà chargé
@@ -264,7 +280,10 @@ function initializeLayers() {
     });
     // Créer la couche Region_3 manuellement
     if (layersCatalog['Region_3'].visible && typeof json_Region_3 !== 'undefined') {
+        console.log('Creating Region_3 layer');
         createLayerFromData('Region_3', json_Region_3);
+    } else {
+        console.log('Region_3 data not available:', typeof json_Region_3);
     }
 }
 
