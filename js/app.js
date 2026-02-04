@@ -187,7 +187,7 @@ function loadLayerData(layerId) {
     document.head.appendChild(script);
 }
 
-function createLayer(layerId) {
+function createLayerFromData(layerId, data) {
     const config = getLayerConfig(layerId);
     if (!config) return;
 
@@ -196,14 +196,10 @@ function createLayer(layerId) {
     map.getPane(`pane_${layerId}`).style.zIndex = paneIndex;
     map.getPane(`pane_${layerId}`).style['mix-blend-mode'] = 'normal';
 
-    const dataVar = `json_${layerId}`;
-    const data = window[dataVar];
-    if (!data) return;
-
     const geoJsonLayer = L.geoJson(data, {
         attribution: '',
         interactive: true,
-        dataVar: dataVar,
+        dataVar: `json_${layerId}`,
         layerName: `layer_${layerId}`,
         pane: `pane_${layerId}`,
         onEachFeature: config.popup,
@@ -233,7 +229,7 @@ function createLayer(layerId) {
     layers[layerId] = {
         layer: geoJsonLayer,
         name: config.name,
-        visible: false,
+        visible: true,
         config: config,
         stats: stats,
         catalog: layersCatalog[layerId]
@@ -241,7 +237,6 @@ function createLayer(layerId) {
 
     // Ajouter la couche
     map.addLayer(geoJsonLayer);
-    layers[layerId].visible = true;
     updateLegend();
 }
 
@@ -261,12 +256,16 @@ function getLayerConfig(id) {
 // ========================================
 
 function initializeLayers() {
-    // Charger seulement les couches visibles par défaut
+    // Charger seulement les couches visibles par défaut, sauf celles déjà chargées
     Object.keys(layersCatalog).forEach(id => {
-        if (layersCatalog[id].visible) {
+        if (layersCatalog[id].visible && id !== 'Region_3') {  // Region_3 est déjà chargé
             loadLayerData(id);
         }
     });
+    // Créer la couche Region_3 manuellement
+    if (layersCatalog['Region_3'].visible && typeof json_Region_3 !== 'undefined') {
+        createLayerFromData('Region_3', json_Region_3);
+    }
 }
 
 // ========================================
@@ -502,12 +501,12 @@ function addMapEvents() {
 
     // Événement de zoom
     map.on('zoomend', function() {
-        updateScale();
+        // updateScale();
     });
 
     // Événement de changement de centre
     map.on('moveend', function() {
-        updateScale();
+        // updateScale();
     });
 
     // Événements de couche
@@ -894,7 +893,7 @@ function initializeCustomControls() {
     });
 
     // Initialiser l'échelle
-    updateScale();
+    // updateScale();
 
     // Initialiser la minimap
     initializeMinimap();
@@ -955,19 +954,19 @@ function initializeMinimap() {
     });
 }
 
-function updateScale() {
-    const bounds = map.getBounds();
-    const center = map.getCenter();
-    const meterPerPixel = 40075017 * Math.abs(Math.cos(center.lat * Math.PI / 180)) / Math.pow(2, map.getZoom() + 8);
-    const scale = meterPerPixel * 100; // Pour 100 pixels
+// function updateScale() {
+//     const bounds = map.getBounds();
+//     const center = map.getCenter();
+//     const meterPerPixel = 40075017 * Math.abs(Math.cos(center.lat * Math.PI / 180)) / Math.pow(2, map.getZoom() + 8);
+//     const scale = meterPerPixel * 100; // Pour 100 pixels
 
-    const scaleText = scale > 1000 ?
-        `${(scale / 1000).toFixed(1)} km` :
-        `${scale.toFixed(0)} m`;
+//     const scaleText = scale > 1000 ?
+//         `${(scale / 1000).toFixed(1)} km` :
+//         `${scale.toFixed(0)} m`;
 
-    document.querySelector('.scale-text').textContent = scaleText;
-    document.querySelector('.scale-line').style.width = '100px';
-}
+//     document.querySelector('.scale-text').textContent = scaleText;
+//     document.querySelector('.scale-line').style.width = '100px';
+// }
 
 function updateLegend() {
     buildLegend();
