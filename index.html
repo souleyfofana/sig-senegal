@@ -8,8 +8,6 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="theme-color" content="#0077BE">
         <link rel="manifest" href="manifest.json">
-        <link rel="preload" href="css/leaflet.css" as="style">
-        <link rel="preload" href="css/modern-app.css" as="style">
         <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
         <link rel="stylesheet" href="css/L.Control.Locate.min.css">
@@ -119,13 +117,6 @@
                 <div class="coordinates-display">
                     <i class="fas fa-crosshairs"></i>
                     <span id="coordinates">Lat: 0.00° | Lon: 0.00°</span>
-                </div>
-
-                <div class="scale-container">
-                    <div id="scale-info" class="scale-info">
-                        <div class="scale-line"></div>
-                        <div class="scale-text">1 km</div>
-                    </div>
                 </div>
 
                 <!-- Zoom controls -->
@@ -268,7 +259,7 @@
         </div>
         <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" as="script">
         <script src="js/qgis2web_expressions.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="js/L.Control.Layers.Tree.min.js" defer></script>
         <script src="js/L.Control.Locate.min.js" defer></script>
         <script src="js/leaflet.rotatedMarker.js" defer></script>
@@ -282,7 +273,6 @@
         <script src="js/leaflet-measure.js" defer></script>
         <script src="js/leaflet.markercluster.js" defer></script>
         <script src="js/leaflet-search.js" defer></script>
-        <script src="data/Region_3.js" defer></script>
         <script src="js/app.js" defer></script>
         <script>
         var highlightLayer;

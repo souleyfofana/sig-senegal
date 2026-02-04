@@ -950,8 +950,8 @@ html, body {
     position: absolute;
     bottom: 10px;
     left: 10px;
-    width: 160px;
-    height: 160px;
+    width: 100px;
+    height: 100px;
     background: var(--white);
     border: 2px solid #0077BE;
     border-radius: 4px;
