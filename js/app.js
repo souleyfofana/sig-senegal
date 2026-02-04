@@ -101,6 +101,7 @@ const basemapsConfig = {
 // ========================================
 
 function initializeMap() {
+    console.log('Initializing map...');
     // Créer la carte
     map = L.map('map', {
         zoomControl: false,
@@ -175,6 +176,7 @@ function initializeBasemaps() {
 // ========================================
 
 function loadLayerData(layerId) {
+    console.log('Loading layer data for:', layerId);
     // Charger le script de données dynamiquement
     const script = document.createElement('script');
     script.src = `data/${layerId}.js`;
@@ -1683,6 +1685,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialiser la carte une fois le DOM chargé
     initializeMap();
 });
+
+// Initialiser immédiatement si le DOM est déjà prêt
+if (document.readyState === 'loading') {
+    // Le DOM n'est pas encore prêt, l'event listener ci-dessus s'en chargera
+} else {
+    // Le DOM est prêt, initialiser immédiatement
+    initializeMap();
+}
 
 // ========================================
 // UTILITAIRES
