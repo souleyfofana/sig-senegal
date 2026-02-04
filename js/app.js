@@ -135,9 +135,6 @@ function initializeMap() {
         
 
         
-    } catch (error) {
-        
-    }
 }
 
     // Initialiser la géolocalisation
@@ -397,9 +394,16 @@ function highlightFeature(e) {
 
 function resetHighlight(e) {
     const layer = e.target;
-    const config = getLayerConfig(layer);
-    if (config) {
-        const style = config.config.style(layer.feature);
+    // Find the layer config
+    let styleFunc = null;
+    for (let key in layers) {
+        if (layers[key].layer === layer || layers[key].layer.hasLayer && layers[key].layer.hasLayer(layer)) {
+            styleFunc = layers[key].config.style;
+            break;
+        }
+    }
+    if (styleFunc) {
+        const style = styleFunc(layer.feature);
         layer.setStyle(style);
     }
 }
