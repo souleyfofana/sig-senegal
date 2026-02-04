@@ -1,47 +1,8 @@
 const CACHE_NAME = 'sig-senegal-v2';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/css/leaflet.css',
-  '/css/L.Control.Layers.Tree.css',
-  '/css/L.Control.Locate.min.css',
-  '/css/qgis2web.css',
-  '/css/fontawesome-all.min.css',
-  '/css/MarkerCluster.css',
-  '/css/MarkerCluster.Default.css',
-  '/css/leaflet-search.css',
-  '/css/leaflet.photon.css',
-  '/css/leaflet-measure.css',
-  '/css/modern-app.css',
-  '/js/leaflet.js',
-  '/js/L.Control.Layers.Tree.min.js',
-  '/js/L.Control.Locate.min.js',
-  '/js/labelgun.min.js',
-  '/js/leaflet-hash.js',
-  '/js/leaflet-heat.js',
-  '/js/leaflet-measure.js',
-  '/js/leaflet-search.js',
-  '/js/leaflet-svg-shape-markers.min.js',
-  '/js/leaflet-tilelayer-wmts.js',
-  '/js/leaflet.js',
-  '/js/leaflet.markercluster.js',
-  '/js/leaflet.pattern.js',
-  '/js/leaflet.photon.js',
-  '/js/leaflet.rotatedMarker.js',
-  '/js/Leaflet.VectorGrid.js',
-  '/js/leaflet.wms.js',
-  '/js/multi-style-layer.js',
-  '/js/OSMBuildings-Leaflet.js',
-  '/js/qgis2web_expressions.js',
-  '/js/rbush.min.js',
-  '/js/app.js',
-  '/js/Autolinker.min.js',
-  '/data/Region_3.js',
-  '/data/Departement_4.js',
-  '/data/Arrondissement_5.js',
-  '/data/localites_7.js',
-  '/data/Routes_6.js',
-  '/manifest.json'
+  './',
+  './index.html',
+  './manifest.json'
 ];
 
 self.addEventListener('install', function(event) {
@@ -50,14 +11,11 @@ self.addEventListener('install', function(event) {
     caches.open(CACHE_NAME)
       .then(function(cache) {
         console.log('Opened cache');
-        // Cache files one by one to handle failures gracefully
-        var cachePromises = urlsToCache.map(function(url) {
-          return cache.add(url).catch(function(error) {
-            console.warn('Failed to cache:', url, error);
-            // Continue with other files even if one fails
-          });
-        });
-        return Promise.all(cachePromises);
+        // Cache only essential files to avoid failures
+        return cache.addAll(urlsToCache);
+      })
+      .catch(function(error) {
+        console.warn('Service Worker installation failed:', error);
       })
   );
 });
