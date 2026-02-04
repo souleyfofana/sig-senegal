@@ -36,7 +36,7 @@ const layersCatalog = {
         attributes: ['Région', 'Département', 'Num_Dept'],
         color: 'rgba(65,184,208,0.7)',
         icon: 'fa-sitemap',
-        visible: true,
+        visible: false,
         info: 'Subdivision administrative au-dessous des régions. Les départements constituent des unités administratives intermédiaires.'
     },
     'Arrondissement_5': {
@@ -46,7 +46,7 @@ const layersCatalog = {
         attributes: ['cav', 'cod_cav'],
         color: 'rgba(49,199,49,0.7)',
         icon: 'fa-th',
-        visible: true,
+        visible: false,
         info: 'Subdivision administrative au-dessous des départements. Les arrondissements sont les plus petites divisions territoriales.'
     },
     'Routes_6': {
