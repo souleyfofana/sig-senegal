@@ -903,6 +903,7 @@ html, body {
 
 .leaflet-container {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f8ff; /* Light blue background when no tiles */
 }
 
 .leaflet-popup-content-wrapper {

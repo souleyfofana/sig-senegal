@@ -3,8 +3,6 @@
    Script Principal - app.js
    ======================================== */
 
-console.log('app.js loaded');
-
 // Variables globales
 let map = null;
 let minimap = null;
@@ -79,7 +77,7 @@ const basemapsConfig = {
         name: 'OpenStreetMap',
         desc: 'Carte standard',
         layer: null,
-        url: 'http://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
         attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap</a>'
     },
     satellite: {
@@ -103,19 +101,16 @@ const basemapsConfig = {
 // ========================================
 
 function initializeMap() {
-    console.log('Initializing map...');
-    try {
-        // Créer la carte
-        map = L.map('map', {
-            zoomControl: false,
-            maxZoom: 28,
-            minZoom: 1
-        }).fitBounds(initialBounds);
-        console.log('Map created');
+    // Créer la carte
+    map = L.map('map', {
+        zoomControl: false,
+        maxZoom: 28,
+        minZoom: 1
+    }).fitBounds(initialBounds);
 
         // Ajouter hash URL
         new L.Hash(map);
-        console.log('Hash added');
+        
 
         // Configuration du contrôle d'attribution
         map.attributionControl.setPrefix(
@@ -125,23 +120,23 @@ function initializeMap() {
 
         // Initialiser les fonds de carte
         initializeBasemaps();
-        console.log('Basemaps initialized');
+        
 
         // Initialiser les couches de données
         initializeLayers();
-        console.log('Layers initialized');
+        
 
         // Ajouter les événements de la carte
         addMapEvents();
-        console.log('Events added');
+        
 
         // Initialiser les contrôles personnalisés
         initializeCustomControls();
-        console.log('Custom controls initialized');
+        
 
-        console.log('Map initialization complete');
+        
     } catch (error) {
-        console.error('Error initializing map:', error);
+        
     }
 }
 
@@ -179,10 +174,10 @@ function initializeBasemaps() {
         basemaps[key] = config.layer;
 
         // Ajouter le premier en défaut
-        // if (key === 'osm') {
-        //     config.layer.addTo(map);
-        //     currentBasemap = key;
-        // }
+        if (key === 'osm') {
+            config.layer.addTo(map);
+            currentBasemap = key;
+        }
     });
 }
 
@@ -191,7 +186,7 @@ function initializeBasemaps() {
 // ========================================
 
 function loadLayerData(layerId) {
-    console.log('Loading layer data for:', layerId);
+    
     // Charger le script de données dynamiquement
     const script = document.createElement('script');
     script.src = `data/${layerId}.js`;
@@ -203,6 +198,7 @@ function loadLayerData(layerId) {
 }
 
 function createLayerFromData(layerId, data) {
+    
     const config = getLayerConfig(layerId);
     if (!config) return;
 
@@ -271,7 +267,7 @@ function getLayerConfig(id) {
 // ========================================
 
 function initializeLayers() {
-    console.log('Initializing layers...');
+    
     // Charger seulement les couches visibles par défaut, sauf celles déjà chargées
     Object.keys(layersCatalog).forEach(id => {
         if (layersCatalog[id].visible && id !== 'Region_3') {  // Region_3 est déjà chargé
@@ -280,10 +276,10 @@ function initializeLayers() {
     });
     // Créer la couche Region_3 manuellement
     if (layersCatalog['Region_3'].visible && typeof json_Region_3 !== 'undefined') {
-        console.log('Creating Region_3 layer');
+        
         createLayerFromData('Region_3', json_Region_3);
     } else {
-        console.log('Region_3 data not available:', typeof json_Region_3);
+        
     }
 }
 
@@ -870,7 +866,7 @@ function toggleLayer(key) {
         // Mettre à jour la légende sans délai
         updateLegend();
     } catch (error) {
-        console.error('Erreur lors du basculement de la couche:', error);
+        
     }
 }
 
@@ -2086,7 +2082,7 @@ function initializeGeolocation() {
             });
         });
     } else {
-        console.log('Géolocalisation non supportée par ce navigateur.');
+        
     }
 }
 
@@ -2136,9 +2132,9 @@ function installApp() {
         // Wait for the user to respond to the prompt
         deferredPrompt.userChoice.then((choiceResult) => {
             if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
+                
             } else {
-                console.log('User dismissed the install prompt');
+                
             }
             deferredPrompt = null;
         });
@@ -2147,7 +2143,7 @@ function installApp() {
 
 // Check if already installed
 window.addEventListener('appinstalled', (evt) => {
-    console.log('App was installed.');
+    
 });
 
 // Event listeners for install banner
